@@ -36,9 +36,10 @@ class AddTodoItem extends Component{
                             <input type="text" onChange = {this.handleChange} value = {this.state.content}/>
                         </div>
                         <div className="input-field col s1">
-                            <button className="btn waves-effect waves-light" type="submit" name="action">
-                                Add
+                            <button className="btn-floating waves-effect waves-light" type="submit" name="action">
+                            <i class="material-icons add">add</i>
                             </button>
+                            
                         </div>
                     </div>
                 </form>

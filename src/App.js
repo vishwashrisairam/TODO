@@ -6,6 +6,8 @@ import AddTodoItem from './AddTodoItem';
 import DoneItems from './DoneItems';
 
 const API_URL ="https://todo-noserver.herokuapp.com/";
+// const API_URL ="http://localhost:5000/";
+
 
 
 class App extends Component {
@@ -16,7 +18,7 @@ class App extends Component {
 
   componentDidMount(){
     
-    const url = API_URL+"getTasks";
+    const url = API_URL+"todos";
     
     axios.get(url).then(response =>{
       let todos = response.data.allTasks;
@@ -28,20 +30,22 @@ class App extends Component {
   deleteTodo = (id) => {
     // console.log(id)
 
-    const url = API_URL+"removeTask/"+id 
+    const url = API_URL+"complete/"+id
+    console.log(url) 
     axios.delete(url).then(response=>{
+      console.log(response)
       let todos = response.data.allTasks;
       let done = response.data.completedTasks;
-      this.setState({todos,done });
+      this.setState({todos,done});
     });
     
   }
 
   addTodo = (todo) =>{
-    const url = API_URL+"addTask";
+    const url = API_URL+"newTask";
     axios.post(url,{"item":todo.content}).then(response=>{
       console.log(response.data)  
-      todo.id=response.data.id;
+      todo._id=response.data._id;
       todo.completed=response.data.completed;
       let todos = [...this.state.todos, todo];
       this.setState({todos});

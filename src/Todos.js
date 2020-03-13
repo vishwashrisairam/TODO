@@ -5,11 +5,9 @@ const Todos = ({todos, deleteTodo}) => {
   const todoList = todos.length ? (
     todos.map(todo => {
       return (
-        <div className="collection-item" key={todo.id}>
+        <div className="collection-item" key={todo._id}>
           <input type="checkbox"/>  
-          <span onClick={() => {deleteTodo(todo.id)}}>{todo.content}</span>
-          
-          
+          <span onClick={() => {deleteTodo(todo._id)}}>{todo.content}</span>
         </div>
       )
     })

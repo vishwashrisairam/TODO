@@ -9,6 +9,20 @@ app.use(bodyParser.json())
 app.use(cors())
 app.use(bodyParser.json())
 
+// Mongo DB Connection with mongoose
+const DB_CONNECT = "mongodb+srv://todoAdmin:todoPassword@testcluster-xxagk.mongodb.net/test?retryWrites=true&w=majority";
+const mongoose = require("mongoose");
+const todo = require('./todoObject');
+mongoose.set("useFindAndModify", false);
+var options = { useNewUrlParser: true,
+                server: { socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 } }, 
+                replset: { socketOptions: { keepAlive: 300000, connectTimeoutMS : 30000 } } };
+mongoose.connect(DB_CONNECT,options, () => {
+    console.log("Connected to db!");
+    app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`))
+
+});
+
 
 //the task array with initial placeholders for added task
 let tasks = [
@@ -59,4 +73,76 @@ app.get('/test', (req, res) => {
     res.send('Hello World!');
 })
 
-app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`))
+// app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`))
+
+
+// Mongo DB APIs Test
+
+app.post('/newTask',(req,res)=>{
+    // let taskid = Math.random()
+    let compl = false;
+    let task = {
+        // id:taskid,
+        content:req.body.item,
+        completed:compl
+    };
+    // const newTask = new todo(task);
+    try{
+        todo.create(task).then(result=>{
+            // console.log(result);
+            res.send(result);
+        })
+       
+
+    }catch(err){
+        res.send(err);
+    }
+});
+
+app.get('/todos',(req,res)=>{
+    todo.find({},(err,todos)=>{
+        if(err){
+            // console.log(err)
+            res.send(err)
+        }else{
+
+            
+            // console.log(todos)
+            let tasks = todos.filter(x=> x.completed === false);
+            let completedTasks = todos.filter(x=>x.completed === true);
+
+            let response ={};
+            response['allTasks'] = tasks;
+            response['completedTasks']=completedTasks;
+            res.json(response);
+        }
+    })
+});
+
+app.delete('/complete/:id',(req,res)=>{
+    let id = req.params.id;
+    todo.findByIdAndUpdate(id,{completed:true},err=>{
+        if(err){
+            res.send(err);
+        }else{
+            // res.redirect('/todos')
+            todo.find({},(err,todos)=>{
+                if(err){                    
+                    res.send(err)
+                }else{
+                    // console.log(todos)
+                    let tasks = todos.filter(x=> x.completed === false);
+                    let completedTasks = todos.filter(x=>x.completed === true);
+        
+                    let response ={};
+                    response['allTasks'] = tasks;
+                    response['completedTasks']=completedTasks;
+                    res.json(response);
+                }
+            })
+        }
+        
+        
+    })
+
+});

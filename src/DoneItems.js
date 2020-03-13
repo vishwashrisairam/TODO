@@ -7,7 +7,7 @@ const DoneItems  = ({items}) => {
         
         items.map(it =>{
             return(
-            <div className="collection-item" key={it.id}>
+            <div className="collection-item" key={it._id}>
                  <input type="checkbox" className="filled-in" defaultChecked="checked" />
                 <span className="done">{it.content}</span>
             </div>
