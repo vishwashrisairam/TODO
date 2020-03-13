@@ -5,9 +5,8 @@ import Todos from './Todos';
 import AddTodoItem from './AddTodoItem';
 import DoneItems from './DoneItems';
 
-// const API_URL ="http://localhost:8080/";
-const API_PORT="8080";
-const API_URL = "http://"+ window.location.hostname+":"+API_PORT+"/";
+const API_URL ="https://todo-noserver.herokuapp.com/";
+
 
 class App extends Component {
   state = {
