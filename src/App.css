@@ -1,0 +1,11 @@
+.done{
+    text-decoration: line-through;
+}
+
+form{
+    display: inline;
+}
+
+input[type='text']{
+    width: 80%;
+}
